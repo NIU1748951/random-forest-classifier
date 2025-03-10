@@ -10,9 +10,27 @@ class DataSet:
         self._table = table
 
     @property
+    def y(self):
+        pass
+
+    @property
     def data(self):
         return self._table
-    
-    @staticmethod
-    def calc_gini():
+
+    @property
+    def num_samples(self):
+        return len(self.data)
+
+    @property
+    def num_features(self):
+        pass
+
+    @property
+    def X(self):
+        pass
+
+    def most_frequent_label(self):
+        pass
+
+    def ssplit(self, idx, val):
         pass
