@@ -1,14 +1,14 @@
 class Data:
-    __slots__ = "_atributes, _result"
+    __slots__ = "_data, _target"
 
     def __init__(self, data, target):
         self._data, self._target = data, target
 
 
-class dataTable:
-    def __inti__(self, data):
-        self._data = data
+class DataSet:
+    def __inti__(self, table):
+        self._table = table
 
     @property
     def data(self):
-        return self._data
+        return self._table
