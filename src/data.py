@@ -18,3 +18,5 @@ class dataTable:
     @staticmethod
     def calc_gini():
         pass
+
+    # ais∫
