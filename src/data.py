@@ -6,9 +6,13 @@ class Data:
 
 
 class DataSet:
-    def __inti__(self, table):
+    def __init__(self, table):
         self._table = table
 
     @property
     def data(self):
         return self._table
+    
+    @staticmethod
+    def calc_gini():
+        pass
