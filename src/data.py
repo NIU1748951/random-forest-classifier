@@ -5,6 +5,8 @@ class Data:
         self._data, self._target = data, target
 
 
+
+
 class dataTable:
     def __inti__(self, data):
         self._data = data
@@ -12,3 +14,7 @@ class dataTable:
     @property
     def data(self):
         return self._data
+    
+    @staticmethod
+    def calc_gini():
+        pass
