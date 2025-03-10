@@ -5,3 +5,6 @@ class Node(ABC):
     @abstractmethod
     def predict(self, x) -> int:
         pass
+
+
+#Follemoss
