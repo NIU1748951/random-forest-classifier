@@ -1,5 +1,6 @@
 import numpy as np
 import sklearn.datasets
+from random_forest import RandomForestClassifier
 
 iris = sklearn.datasets.load_iris() 
 

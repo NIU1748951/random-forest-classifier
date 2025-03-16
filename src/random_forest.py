@@ -100,9 +100,13 @@ class RandomForestClassifier:
 
         return cost
 
-    @property
-    def _gini(self, dataset):
-        pass
+    
+    def _gini(self, dataset): # using gini's formula we have:
+        labels, counts = np.unique(dataset.y, return_counts=True) #unique labels and how many times do they appear?
+        total = dataset.num_samples
+        probabilities = counts / total # proportion of each class
+        
+        return 1 - np.sum(probabilities**2)
 
     def predict(self, X) -> List[int]:
         pass
