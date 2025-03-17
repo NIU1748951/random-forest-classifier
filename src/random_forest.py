@@ -22,7 +22,7 @@ class RandomForestClassifier:
         self._ratio_samples = ratio_samples
         self._num_random_features = num_random_features
         self._criterion = criterion
-        self._decison_trees = NotImplemented
+        self._decison_trees = []
 
     def fit(self, X, y) -> None:
         # a pair (X, y) is a dataset
@@ -94,7 +94,7 @@ class RandomForestClassifier:
                     )
         return best_feature_index, best_threshold, minimum_cost, best_split
 
-    def _CART_cost(self, left_dataset, right_dataset):
+    def _CART_cost(self, left_dataset, right_dataset):  # TODO 
         """This function determines how good is a certain split in a decision tree by evaluating their gini index."""
         """The formula used is the following: """
         """( ((number of samples of the left split / number of total samples)) * (gini index of the left split ) ) + ( ((number of samples of the right split) * (number of total samples) ) * (gini index of the right split))"""
@@ -102,9 +102,13 @@ class RandomForestClassifier:
         if n_total == 0:
             return 0 #obviously if there is no samples, the cart cost is 0
         
-        gini_left = self._gini(left_dataset)
-        gini_right = self._gini(right_dataset)
-
+        if self.algorithm == 'gini':
+            gini_left = self._gini(left_dataset)
+            gini_right = self._gini(right_dataset)
+        else:
+            print(f"Not implemented criterion: {self.algortihm}")
+            exit(1)
+            
         cost = (left_dataset.num_samples / n_total) * gini_left + (right_dataset.num_samples / n_total) * gini_right
 
         return cost
