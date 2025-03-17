@@ -95,9 +95,13 @@ class RandomForestClassifier:
         return best_feature_index, best_threshold, minimum_cost, best_split
 
     def _CART_cost(self, left_dataset, right_dataset):  # TODO 
-        """This function determines how good is a certain split in a decision tree by evaluating their gini index."""
-        """The formula used is the following: """
-        """( ((number of samples of the left split / number of total samples)) * (gini index of the left split ) ) + ( ((number of samples of the right split) * (number of total samples) ) * (gini index of the right split))"""
+        """
+        
+        This function determines how good is a certain split in a decision tree by evaluating their gini index.
+        The formula used is the following: 
+        ((number of samples of the left split / number of total samples)) * (gini index of the left split ) ) + ( ((number of samples of the right split) * (number of total samples) ) * (gini index of the right split))
+
+        """
         n_total = left_dataset.num_samples + right_dataset.num_samples
         if n_total == 0:
             return 0 #obviously if there is no samples, the cart cost is 0
