@@ -8,5 +8,7 @@ class Leaf(Node):
         self._label = label
 
     def predict(self, x):
-        return self._lable
+        return self._label
 
+    def calc_gini(self):
+        pass
