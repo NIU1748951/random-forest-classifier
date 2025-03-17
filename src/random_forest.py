@@ -8,7 +8,6 @@ import numpy as np
 class RandomForestClassifier:
     def __init__(
         self,
-        *,
         num_trees=100,
         min_size=1,
         max_depth=10,
@@ -28,6 +27,17 @@ class RandomForestClassifier:
         # a pair (X, y) is a dataset
         dataset = DataSet(X, y)
         self.make_decision_trees(dataset)
+
+    def predict(self, X):
+        ypred = []
+
+        for x in X:
+            predictions = [root.predict(x) for root in self._decison_trees]
+
+            #majority voting
+            ypred.append(max(set(predictions), key = predictions.count))
+
+        return np.array(ypred)
 
     def make_decision_trees(self, dataset):
         self._decison_trees = []
@@ -96,7 +106,7 @@ class RandomForestClassifier:
 
     def _CART_cost(self, left_dataset, right_dataset):  # TODO 
         """
-        
+
         This function determines how good is a certain split in a decision tree by evaluating their gini index.
         The formula used is the following: 
         ((number of samples of the left split / number of total samples)) * (gini index of the left split ) ) + ( ((number of samples of the right split) * (number of total samples) ) * (gini index of the right split))

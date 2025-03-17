@@ -5,12 +5,12 @@ class DataSet:
         self._X = np.array(X)
         self._y = np.array(y)
 
-    @classmethod
-    def random_sampling(cls, table, ratio_samples):
-        n_samples = int((len(table)*ratio_samples)) #nombre de mostres
-        sampled_data = np.random.choice(table, size = n_samples, replace = True) #bootstrapping
+    def random_sampling(self, ratio_samples):
+        num_samples = int(len(self._X) * ratio_samples)  # Calculate the number of samples to draw
+        sampled_data = np.random.choice(a=self._X.flatten(), size=num_samples, replace=True)  # Bootstrapping
+        print("Sampled table:", sampled_data)
 
-        return cls(sampled_data)
+        return DataSet(sampled_data, self._y)  # Return DataSet with sampled data
     
     @property
     def y(self):
@@ -33,23 +33,19 @@ class DataSet:
 
     @property
     def X(self):
-        return self.X
+        return self._X
 
     def most_frequent_label(self):
-        unique_labels, counts = np.unique(self._y, return_counts=True) #most common label
+        unique_labels, counts = np.unique(self._y, return_counts=True)  # Most common label
         return unique_labels[np.argmax(counts)]
 
     def split(self, idx_feature, value):
-        # we split the data in two sub-sets: the ones that have the feature value in "idx" less than "val"
-        # and the ones that have the same value or more
         left_mask = self._X[:, idx_feature] < value
         right_mask = ~left_mask
 
-        #we filter the data by their masks
         left_data = self._X[left_mask]
         right_data = self._X[right_mask]
         left_labels = self._y[left_mask]
         right_labels = self._y[right_mask]
 
-        #returning two datasets
         return DataSet(left_data, left_labels), DataSet(right_data, right_labels)

@@ -2,6 +2,10 @@ import numpy as np
 import sklearn.datasets
 from random_forest import RandomForestClassifier
 
+from nodes.node import Node
+from nodes.leaf import Leaf
+from nodes.parent import Parent
+
 iris = sklearn.datasets.load_iris() 
 
 print(iris.DESCR)
