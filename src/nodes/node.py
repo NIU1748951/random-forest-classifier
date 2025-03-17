@@ -6,5 +6,3 @@ class Node(ABC):
     def predict(self, x) -> int:
         pass
 
-
-#Follemoss
