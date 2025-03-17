@@ -9,6 +9,3 @@ class Leaf(Node):
 
     def predict(self, x):
         return self._label
-
-    def calc_gini(self):
-        pass
