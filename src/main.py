@@ -6,9 +6,13 @@ from nodes.node import Node
 from nodes.leaf import Leaf
 from nodes.parent import Parent
 
+from logger_config import get_logger
+
+logger = get_logger(__name__)
+
 iris = sklearn.datasets.load_iris() 
 
-print(iris.DESCR)
+logger.info(iris.DESCR)
 
 X, y = iris.data, iris.target 
 ratio_train, ratio_test = 0.7, 0.3  
@@ -46,15 +50,22 @@ rf = RandomForestClassifier(
     criterion
 )
 
-# train = make the decision trees
-rf.fit(X_train, y_train)
 
-# classification
-ypred = rf.predict(X_test)
+if __name__ == "__main__":
+    logger.info("Starting the Random Forest Classifier")
+    # train = make the decision trees
+    
+    try:
+        rf.fit(X_train, y_train)
 
-# compute accuracy
-num_samples_test = len(y_test)
-num_correct_predictions = np.sum(ypred == y_test)
-accuracy = num_correct_predictions / float(num_samples_test)
+        # classification
+        ypred = rf.predict(X_test)
 
-print('accuracy {} %'.format(100 * np.round(accuracy, decimals=2)))
+        # compute accuracy
+        num_samples_test = len(y_test)
+        num_correct_predictions = np.sum(ypred == y_test)
+        accuracy = num_correct_predictions / float(num_samples_test)
+
+        logger.warning('accuracy {} %'.format(100 * np.round(accuracy, decimals=2)))
+    except Exception as e:
+        logger.error("An error occurred: %s", str(e))

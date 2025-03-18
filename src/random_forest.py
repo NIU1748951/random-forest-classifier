@@ -3,7 +3,9 @@ from data import DataSet
 from nodes.leaf import Leaf
 from nodes.parent import Parent
 import numpy as np
+from logger_config import get_logger
 
+logger = get_logger(__name__)
 
 class RandomForestClassifier:
     def __init__(
@@ -22,13 +24,16 @@ class RandomForestClassifier:
         self._num_random_features = num_random_features
         self._criterion = criterion
         self._decison_trees = []
+        logger.info("RandomForestClassifier inititalized with %d trees", num_trees)
 
     def fit(self, X, y) -> None:
-        # a pair (X, y) is a dataset
+        logger.info("Starting fit process with %d samples", len(X))
         dataset = DataSet(X, y)
         self.make_decision_trees(dataset)
+        logger.info("Fit process completed")
 
     def predict(self, X):
+        logger.info("Starting prediction for %d samples", len(X))
         ypred = []
 
         for x in X:
@@ -36,7 +41,8 @@ class RandomForestClassifier:
 
             #majority voting
             ypred.append(max(set(predictions), key = predictions.count))
-
+        
+        logger.info("Predictions completed")
         return np.array(ypred)
 
     def make_decision_trees(self, dataset):
