@@ -1,5 +1,7 @@
 import numpy as np
+from logger_config import get_logger
 
+logger = get_logger(__name__)
 class DataSet:
     def __init__(self, X, y):
         self._X = np.array(X)
@@ -10,10 +12,15 @@ class DataSet:
     def random_sampling(self, ratio_samples):
         self._ratio_samples = ratio_samples
         self.num_samples = int(len(self._X) * ratio_samples)  # Calculate the number of samples to draw
-        sampled_data = np.random.choice(a=self._X.flatten(), size=self.num_samples, replace=True)  # Bootstrapping
-        print("Sampled table:", sampled_data)
+        
+        sampled_indices = np.random.choice(a=self._X.shape[0], size=self.num_samples, replace=True)  # Bootstrapping
+        
+        sampled_X = self._X[sampled_indices]
+        sampled_y = self._y[sampled_indices]
 
-        return DataSet(sampled_data, self._y)  # Return DataSet with sampled data
+        logger.info("Sampled %d rows from the dataset", self.num_samples)
+
+        return DataSet(sampled_X, sampled_y)
     
     @property
     def y(self):

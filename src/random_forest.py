@@ -13,7 +13,7 @@ class RandomForestClassifier:
         num_trees=100,
         min_size=1,
         max_depth=10,
-        ratio_samples=0.8,
+        ratio_samples=1,
         num_random_features=0.33,
         criterion="gini",
     ):
@@ -33,7 +33,7 @@ class RandomForestClassifier:
         logger.info("Fit process completed")
 
     def predict(self, X):
-        logger.info("Starting prediction for %d samples", len)
+        logger.info("Starting prediction for %d samples", len(X))
         ypred = []
 
         for x in X:
@@ -51,6 +51,7 @@ class RandomForestClassifier:
             subset = dataset.random_sampling(
                 self._ratio_samples
             )  # IMPLEMENTAR EN DATASET
+            
             tree = self.make_node(subset, 1)
             self._decison_trees.append(tree)
             logger.info("Created a decision tree with %d samples", subset.num_samples)
@@ -127,7 +128,7 @@ class RandomForestClassifier:
             gini_left = self._gini(left_dataset)
             gini_right = self._gini(right_dataset)
         else:
-            print(f"Not implemented criterion: {self.algortihm}")
+            logger.error(f"Not implemented criterion: {self.algortihm}")
             exit(1)
             
         cost = (left_dataset.num_samples / n_total) * gini_left + (right_dataset.num_samples / n_total) * gini_right
