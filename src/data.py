@@ -18,6 +18,7 @@ class DataSet:
         sampled_X = self._X[sampled_indices]
         sampled_y = self._y[sampled_indices]
 
+        logger.info("Ratio samples: %f", self._ratio_samples)
         logger.info("Sampled %d rows from the dataset", self.num_samples)
 
         return DataSet(sampled_X, sampled_y)
