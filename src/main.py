@@ -66,6 +66,9 @@ if __name__ == "__main__":
         num_correct_predictions = np.sum(ypred == y_test)
         accuracy = num_correct_predictions / float(num_samples_test)
 
-        logger.warning('accuracy {} %'.format(100 * np.round(accuracy, decimals=2)))
+        if (100 * np.round(accuracy, decimals=2)) < 50.0:
+            logger.warning('accuracy {} %'.format(100 * np.round(accuracy, decimals=2)))
+        else:
+            logger.info('accuracy {} %'.format(100 * np.round(accuracy, decimals=2)))
     except Exception as e:
         logger.error("An error occurred: %s", str(e))

@@ -4,10 +4,13 @@ class DataSet:
     def __init__(self, X, y):
         self._X = np.array(X)
         self._y = np.array(y)
+        self.ratio_samples = 0
+        self.num_samples = 0
 
     def random_sampling(self, ratio_samples):
-        num_samples = int(len(self._X) * ratio_samples)  # Calculate the number of samples to draw
-        sampled_data = np.random.choice(a=self._X.flatten(), size=num_samples, replace=True)  # Bootstrapping
+        self._ratio_samples = ratio_samples
+        self.num_samples = int(len(self._X) * ratio_samples)  # Calculate the number of samples to draw
+        sampled_data = np.random.choice(a=self._X.flatten(), size=self.num_samples, replace=True)  # Bootstrapping
         print("Sampled table:", sampled_data)
 
         return DataSet(sampled_data, self._y)  # Return DataSet with sampled data
@@ -19,10 +22,6 @@ class DataSet:
     @property
     def data(self):
         return self._table
-
-    @property
-    def num_samples(self):
-        return self._X.shape[0]
 
     @property
     def num_features(self):

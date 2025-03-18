@@ -33,7 +33,7 @@ class RandomForestClassifier:
         logger.info("Fit process completed")
 
     def predict(self, X):
-        logger.info("Starting prediction for %d samples", len(X))
+        logger.info("Starting prediction for %d samples", len)
         ypred = []
 
         for x in X:
@@ -45,7 +45,7 @@ class RandomForestClassifier:
         logger.info("Predictions completed")
         return np.array(ypred)
 
-    def make_decision_trees(self, dataset):
+    def make_decision_trees(self, dataset: DataSet):
         self._decison_trees = []
         for i in range(self._num_trees):
             subset = dataset.random_sampling(
@@ -53,6 +53,7 @@ class RandomForestClassifier:
             )  # IMPLEMENTAR EN DATASET
             tree = self.make_node(subset, 1)
             self._decison_trees.append(tree)
+            logger.info("Created a decision tree with %d samples", subset.num_samples)
 
     def make_node(self, dataset, depth):
         if (
