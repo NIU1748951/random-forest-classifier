@@ -13,7 +13,7 @@ class RandomForestClassifier:
         num_trees=100,
         min_size=1,
         max_depth=10,
-        ratio_samples=1,
+        ratio_samples=0.8,
         num_random_features=0.33,
         criterion="gini",
     ):
@@ -28,7 +28,7 @@ class RandomForestClassifier:
 
     def fit(self, X, y) -> None:
         logger.info("Starting fit process with %d samples", len(X))
-        dataset = DataSet(X, y)
+        dataset = DataSet(X, y, 0, 0)
         self.make_decision_trees(dataset)
         logger.info("Fit process completed")
 
@@ -50,13 +50,13 @@ class RandomForestClassifier:
         for i in range(self._num_trees):
             subset = dataset.random_sampling(
                 self._ratio_samples
-            )  # IMPLEMENTAR EN DATASET
+            ) 
             
-            tree = self.make_node(subset, 1)
+            tree = self._make_node(subset, 1)
             self._decison_trees.append(tree)
             logger.info("Created a decision tree with %d samples", subset.num_samples)
 
-    def make_node(self, dataset, depth):
+    def _make_node(self, dataset, depth):
         if (
             depth == self._max_depth
             or dataset.num_samples <= self._min_size
@@ -64,7 +64,7 @@ class RandomForestClassifier:
         ):
             node = self._make_leaf(dataset)
         else:
-            node = self._make_leaf(dataset)
+            node = self._make_parent_or_leaf(dataset, depth)
 
         return node
 
@@ -93,9 +93,9 @@ class RandomForestClassifier:
 
     def _best_split(self, idx_features, dataset):
         best_feature_index, best_threshold, minimum_cost, best_split = (
-            np.Inf,
-            np.Inf,
-            np.Inf,
+            np.inf,
+            np.inf,
+            np.inf,
             None,
         )
         for idx in idx_features:
@@ -124,7 +124,7 @@ class RandomForestClassifier:
         if n_total == 0:
             return 0 #obviously if there is no samples, the cart cost is 0
         
-        if self.algorithm == 'gini':
+        if self._criterion == 'gini':
             gini_left = self._gini(left_dataset)
             gini_right = self._gini(right_dataset)
         else:

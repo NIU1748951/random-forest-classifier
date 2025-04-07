@@ -7,6 +7,7 @@ from nodes.leaf import Leaf
 from nodes.parent import Parent
 
 from logger_config import get_logger
+from accuracy import *
 
 logger = get_logger(__name__)
 
@@ -64,7 +65,7 @@ if __name__ == "__main__":
         # compute accuracy
         num_samples_test = len(y_test)
         num_correct_predictions = np.sum(ypred == y_test)
-        accuracy = num_correct_predictions / float(num_samples_test)
+        accuracy = calculate_accuracy(num_samples_test, num_correct_predictions)
 
         if (100 * np.round(accuracy, decimals=2)) < 50.0:
             logger.warning('accuracy {} %'.format(100 * np.round(accuracy, decimals=2)))
