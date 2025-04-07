@@ -20,7 +20,7 @@ class DataSet:
         logger.info("Ratio samples: %f", self._ratio_samples)
         logger.info("Sampled %d rows from the dataset", self.num_samples)
 
-        return DataSet(sampled_X, sampled_y, self.num_samples, self._ratio_samples)
+        return DataSet(sampled_X, sampled_y, self._ratio_samples, len(sampled_X))
     
     @property
     def y(self):

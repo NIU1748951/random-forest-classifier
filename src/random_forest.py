@@ -26,9 +26,9 @@ class RandomForestClassifier:
         self._decison_trees = []
         logger.info("RandomForestClassifier inititalized with %d trees", num_trees)
 
-    def fit(self, X, y) -> None:
+    def fit(self, X, y):
         logger.info("Starting fit process with %d samples", len(X))
-        dataset = DataSet(X, y, 0, 0)
+        dataset = DataSet(X, y, self._ratio_samples, len(X))
         self.make_decision_trees(dataset)
         logger.info("Fit process completed")
 
@@ -112,33 +112,41 @@ class RandomForestClassifier:
                     )
         return best_feature_index, best_threshold, minimum_cost, best_split
 
-    def _CART_cost(self, left_dataset, right_dataset):  # TODO 
+    def _CART_cost(self, left_dataset, right_dataset):
         """
-
-        This function determines how good is a certain split in a decision tree by evaluating their gini index.
-        The formula used is the following: 
-        ((number of samples of the left split / number of total samples)) * (gini index of the left split ) ) + ( ((number of samples of the right split) * (number of total samples) ) * (gini index of the right split))
-
+        Improved split cost calculation using weighted gini impurity
         """
-        n_total = left_dataset.num_samples + right_dataset.num_samples
-        if n_total == 0:
-            return 0 #obviously if there is no samples, the cart cost is 0
+        n_left = left_dataset.num_samples
+        n_right = right_dataset.num_samples
+        n_total = n_left + n_right
         
+        if n_total == 0:
+            return float('inf')  # Worst possible cost if no samples
+            
         if self._criterion == 'gini':
-            gini_left = self._gini(left_dataset)
-            gini_right = self._gini(right_dataset)
+            gini_left = self._gini(left_dataset) if n_left > 0 else 1
+            gini_right = self._gini(right_dataset) if n_right > 0 else 1
         else:
-            logger.error(f"Not implemented criterion: {self.algortihm}")
+            logger.error(f"Unsupported criterion: {self._criterion}")
             exit(1)
             
-        cost = (left_dataset.num_samples / n_total) * gini_left + (right_dataset.num_samples / n_total) * gini_right
-
+        # Weighted gini impurity with regularization
+        cost = (n_left/n_total)*gini_left + (n_right/n_total)*gini_right
+        cost += 0.01*(1/(n_left+1) + 1/(n_right+1))  # Small penalty for imbalanced splits
+        
         return cost
 
     
-    def _gini(self, dataset): # using gini's formula we have:
-        labels, counts = np.unique(dataset.y, return_counts=True) #unique labels and how many times do they appear?
-        total = dataset.num_samples
-        probabilities = counts / total # proportion of each class
+    def _gini(self, dataset):
+        """
+        More robust gini impurity calculation
+        """
+        if dataset.num_samples == 0:
+            return 1.0  # Maximum impurity for empty node
+            
+        _, counts = np.unique(dataset.y, return_counts=True)
+        probabilities = counts / dataset.num_samples
+        gini = 1.0 - np.sum(probabilities**2)
         
-        return 1 - np.sum(probabilities**2)
+        # Add small epsilon to avoid perfect splits
+        return gini + 1e-8

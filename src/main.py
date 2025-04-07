@@ -36,7 +36,7 @@ X_test, y_test = X[idx_test], y[idx_test]
 # Hyperparameters
 max_depth = 10  
 min_size_split = 5  
-ratio_samples = 0.7  
+ratio_samples = 1.0  # Use full bootstrap samples
 num_trees = 10  
 num_random_features = int(np.sqrt(num_features))  
 # number of features to consider at each node when looking for the best split
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         # compute accuracy
         num_samples_test = len(y_test)
         num_correct_predictions = np.sum(ypred == y_test)
-        accuracy = calculate_accuracy(num_samples_test, num_correct_predictions)
+        accuracy = accuracy(num_samples_test, num_correct_predictions)
 
         if (100 * np.round(accuracy, decimals=2)) < 50.0:
             logger.warning('accuracy {} %'.format(100 * np.round(accuracy, decimals=2)))
